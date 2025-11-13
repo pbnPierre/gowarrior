@@ -4,7 +4,7 @@ import "fmt"
 
 const MAX_HEALTH = 20
 
-type player interface {
+type Player interface {
 	toUtf8Char() string
 	toANSIChar() float64
 	perform_turn()
@@ -17,7 +17,7 @@ type warrior struct {
 	name         string
 }
 
-func newWarrior(name string) *warrior {
+func NewWarrior(name string) *warrior {
 	p := warrior{name: name}
 	p.score = 0
 	p.attack_power = 2
@@ -33,14 +33,14 @@ func (w *warrior) String() string {
 	return w.name
 }
 
-func (w warrior) toUtf8Char() string {
+func (w warrior) ToUtf8Char() string {
 	return "🤺"
 }
 
-func (w warrior) toANSIChar() string {
+func (w warrior) ToANSIChar() string {
 	return "@"
 }
 
-func perform_turn(w warrior) {
+func Perform_turn(w warrior) {
 	fmt.Println("Does Nothing")
 }
