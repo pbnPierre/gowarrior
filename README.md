@@ -58,5 +58,11 @@ Note: I'm in the process of fine-tuning the grading system. If you find the `S` 
 
 TODO
 
-# Source
+# Other versions
+
 This program is a direct inspiration of the brilliant [Ruby warrior](https://github.com/ryanb/ruby-warrior)
+
+You can find other version of this project in a variety of languages
+* [Godot](https://github.com/lkhedlund/godot-warrior)
+* [PHP](https://github.com/yandod/php-warrior)
+* [Python](https://github.com/arbylee/python-warrior)
