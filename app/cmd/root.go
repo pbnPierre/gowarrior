@@ -2,8 +2,9 @@ package cmd
 
 import (
 	"fmt"
+	"strconv"
 
-	"pbnPierre/gowarrior/towers/beginner/level1"
+	"pbnPierre/gowarrior/app/game"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -23,8 +24,13 @@ var (
 func run(cmd *cobra.Command, args []string) {
 	fmt.Println("Hello dear", name, "!")
 	fmt.Println("Welcome to the Golang Tower")
-	tower := level1.Create()
-	fmt.Println(tower.String())
+	i_level, err := strconv.Atoi(level)
+	if err != nil {
+		panic(err)
+	}
+	game := game.NewGame(name, i_level)
+	fmt.Println(game.Map())
+	fmt.Println(game.Legend())
 }
 
 func Execute() error {
@@ -32,7 +38,7 @@ func Execute() error {
 }
 
 func init() {
-	rootCmd.PersistentFlags().StringVarP(&level, "level", "l", "", "--level 1")
+	rootCmd.PersistentFlags().StringVarP(&level, "level", "l", "0", "--level 1")
 	rootCmd.PersistentFlags().StringVarP(&name, "name", "n", "William Wallace", "--name William Wallace")
 	viper.BindPFlag("level", rootCmd.PersistentFlags().Lookup("level"))
 	viper.BindPFlag("name", rootCmd.PersistentFlags().Lookup("name"))
