@@ -1,6 +1,6 @@
-package warrior
+package units
 
-import "fmt"
+import "pbnPierre/gowarrior/app"
 
 const MAX_HEALTH = 20
 
@@ -16,15 +16,17 @@ type Warrior struct {
 	Shoot_power  int
 	name         string
 	Health       int
+	Coordinates  app.Coordinates
 }
 
-func NewWarrior(name string) *Warrior {
-	p := Warrior{name: name}
-	p.Health = MAX_HEALTH
-	p.Score = 0
-	p.Attack_power = 2
-	p.Shoot_power = 3
-	return &p
+func NewWarrior(name string, Coordinates app.Coordinates) *Warrior {
+	w := Warrior{name: name}
+	w.Health = MAX_HEALTH
+	w.Score = 0
+	w.Attack_power = 2
+	w.Shoot_power = 3
+	w.Coordinates = Coordinates
+	return &w
 }
 
 func (w *Warrior) String() string {
@@ -43,6 +45,13 @@ func (w Warrior) ToANSIChar() string {
 	return "@"
 }
 
-func Perform_turn(w Warrior) {
-	fmt.Println("Does Nothing")
+func (w *Warrior) FeelEnemy() bool {
+	return true
+}
+
+func (w *Warrior) Walk() {
+	w.Coordinates.X += 1
+}
+
+func (w *Warrior) Attack() {
 }

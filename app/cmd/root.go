@@ -23,14 +23,12 @@ var (
 
 func run(cmd *cobra.Command, args []string) {
 	fmt.Println("Hello dear", name, "!")
-	fmt.Println("Welcome to the Golang Tower")
 	i_level, err := strconv.Atoi(level)
 	if err != nil {
 		panic(err)
 	}
 	game := game.NewGame(name, i_level)
-	fmt.Println(game.Map())
-	fmt.Println(game.Legend())
+	game.Run()
 }
 
 func Execute() error {
