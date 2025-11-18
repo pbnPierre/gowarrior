@@ -1,14 +1,10 @@
-package units
+package unit
 
-import "pbnPierre/gowarrior/app"
+import (
+	"pbnPierre/gowarrior/app"
+)
 
 const MAX_HEALTH = 20
-
-type Player interface {
-	toUtf8Char() string
-	toANSIChar() float64
-	perform_turn()
-}
 
 type Warrior struct {
 	Score        int

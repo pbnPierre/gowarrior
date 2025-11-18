@@ -2,11 +2,11 @@ package game
 
 import (
 	"pbnPierre/gowarrior/app"
-	"pbnPierre/gowarrior/app/units"
+	"pbnPierre/gowarrior/app/unit"
 )
 
 type Player struct {
-	warrior units.Warrior
+	warrior unit.Warrior
 }
 
 func (p *Player) PlayTurn() {
@@ -15,7 +15,7 @@ func (p *Player) PlayTurn() {
 
 func NewPlayer(name string) *Player {
 	Coordinates := app.Coordinates{X: 0, Y: 0}
-	warrior := units.NewWarrior(name, Coordinates)
+	warrior := unit.NewWarrior(name, Coordinates)
 	p := Player{warrior: *warrior}
 	return &p
 }

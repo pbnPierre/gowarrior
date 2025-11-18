@@ -1,13 +1,17 @@
 package game
 
 import (
+	"bytes"
+	"encoding/gob"
 	"fmt"
+	"reflect"
 	"strconv"
 	"strings"
 
 	"pbnPierre/gowarrior/towers/beginner/level1"
 
 	"pbnPierre/gowarrior/app/tower"
+	"pbnPierre/gowarrior/app/unit"
 )
 
 const MAX_LOOP = 10
@@ -19,6 +23,7 @@ const STAIRS = "📈"
 type Game struct {
 	tower  tower.Tower
 	player Player
+	units  []unit.Unit
 }
 
 func NewGame(name string, level int) *Game {
@@ -30,22 +35,21 @@ func NewGame(name string, level int) *Game {
 
 func (g *Game) Run() {
 	fmt.Println(g.tower.Description)
-	fmt.Println(g.Map())
-	fmt.Println(g.Legend())
+	fmt.Println(g.getMap())
+	fmt.Println(g.legend())
 	fmt.Println(g.tower.Tip)
-	i := 0
-	for ok := true; ok; ok = !g.HasWon() {
-		if i > MAX_LOOP {
-			panic("Too much turn boom")
-		}
+	for ok := true; ok; ok = !g.hasWon() {
+		previousState := g.hash()
 		g.player.PlayTurn()
-		i++
-		fmt.Println(g.Map())
+		fmt.Println(g.getMap())
+		if reflect.DeepEqual(previousState, g.hash()) {
+			panic("Game state is stuck boom boom")
+		}
 	}
 	fmt.Println("YOU WIN !")
 }
 
-func (g *Game) Map() string {
+func (g Game) getMap() string {
 	var rows []string
 	rows = append(rows, strings.Repeat(WALL, g.tower.Size.Width+2))
 	for y := 0; y < g.tower.Size.Height; y++ {
@@ -67,7 +71,7 @@ func (g *Game) Map() string {
 	return strings.Join(rows, "\n")
 }
 
-func (g *Game) Legend() string {
+func (g Game) legend() string {
 	var rows []string
 
 	rows = append(rows, WALL+" = Wall")
@@ -79,6 +83,12 @@ func (g *Game) Legend() string {
 	return strings.Join(rows, "\n")
 }
 
-func (g *Game) HasWon() bool {
+func (g Game) hasWon() bool {
 	return g.tower.Stairs == g.player.warrior.Coordinates
+}
+
+func (g Game) hash() []byte {
+	var b bytes.Buffer
+	gob.NewEncoder(&b).Encode(g)
+	return b.Bytes()
 }
