@@ -1,7 +1,12 @@
 package unit
 
+import "pbnPierre/gowarrior/app"
+
 type Unit interface {
-	toUtf8Char() string
-	toANSIChar() float64
+	AttackPower() int
+	ShootPower() int
+	Health() int
+	Coordinates() *app.Coordinates
+	ToChar() string
 	PerformTurn()
 }

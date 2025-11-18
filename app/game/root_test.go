@@ -1,6 +1,7 @@
 package game
 
 import (
+	"pbnPierre/gowarrior/app"
 	"strings"
 	"testing"
 )
@@ -28,23 +29,49 @@ func TestPrintingLegend(t *testing.T) {
 	}
 }
 func TestSameCompare(t *testing.T) {
-	tower1 := NewGame("José", 1)
-	tower2 := NewGame("José", 1)
-	tower3 := NewGame("Georges", 1)
+	game1 := NewGame("José", 1)
+	game2 := NewGame("José", 1)
+	game3 := NewGame("Georges", 1)
 
-	if tower1.isSame(tower2) {
-		t.Errorf("tower1 must be considered as same as tower2")
+	if !game1.isSame(game2) {
+		t.Errorf("game 1 must be considered as same as game 2")
 	}
 
-	if tower1.isSame(tower3) {
-		t.Errorf("tower1 must be considered as same as tower3")
+	if game1.isSame(game3) {
+		t.Errorf("game 1 must be considered as same as game 3")
 	}
 
-	if tower2.isSame(tower3) {
-		t.Errorf("tower2 must not be considered as same as tower3")
+	if !game2.isSame(game3) {
+		t.Errorf("game 2 must not be considered as same as game 3")
 	}
 
-	if tower1.isSame(tower1) {
-		t.Errorf("tower1 must not be considered as same as itself")
+	if !game1.isSame(game1) {
+		t.Errorf("game 1 must not be considered as same as itself")
+	}
+}
+
+func TestFeelMonster(t *testing.T) {
+	game := NewGame("José", 2)
+	feel50 := game.Feel(*app.NewCoordinates(5, 0))
+	feel10 := game.Feel(*app.NewCoordinates(1, 0))
+
+	if !feel50.monster {
+		t.Errorf("game level 2 must feel a monster on 5.0")
+	}
+	if feel10.monster {
+		t.Errorf("game level 2 must not feel a monster on 1.0")
+	}
+}
+
+func TestFeelWarriorMonster(t *testing.T) {
+	game := NewGame("José", 2)
+	feel50 := game.Feel(*app.NewCoordinates(5, 0))
+	feel10 := game.Feel(*app.NewCoordinates(1, 0))
+
+	if feel50.warrior {
+		t.Errorf("game level 2 must noy feel a warrior on 5.0")
+	}
+	if !feel10.warrior {
+		t.Errorf("game level 2 must feel a warrior on 1.0")
 	}
 }

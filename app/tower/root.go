@@ -2,10 +2,6 @@ package tower
 
 import "pbnPierre/gowarrior/app"
 
-type Size struct {
-	Width  int
-	Height int
-}
 type Tower struct {
 	Description string
 	Tip         string

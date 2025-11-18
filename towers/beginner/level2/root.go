@@ -13,6 +13,6 @@ func Create() *tower.Tower {
 		15,
 		10,
 		tower.Size{Width: 8, Height: 1},
-		app.Coordinates{X: 7, Y: 0},
+		*app.NewCoordinates(7, 0),
 	)
 }

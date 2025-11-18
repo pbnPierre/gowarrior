@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"strings"
 
+	"pbnPierre/gowarrior/app"
 	"pbnPierre/gowarrior/towers/beginner/level1"
 
 	"pbnPierre/gowarrior/app/tower"
@@ -29,11 +30,12 @@ type Game struct {
 func NewGame(name string, level int) *Game {
 	tower := level1.Create()
 	player := NewPlayer(name)
-	g := Game{tower: *tower, player: *player}
+	g := Game{tower: *tower, player: *player, units: []unit.Unit{}}
 	return &g
 }
 
 func (g *Game) Run() {
+	fmt.Println("Hello dear", g.player.warrior.Name(), "!")
 	fmt.Println(g.tower.Description)
 	fmt.Println(g.getMap())
 	fmt.Println(g.legend())
@@ -59,7 +61,7 @@ func (g Game) getMap() string {
 			if x == g.tower.Stairs.X && y == g.tower.Stairs.Y {
 				piece = append(piece, STAIRS)
 			} else if x == g.player.warrior.Coordinates.X && y == g.player.warrior.Coordinates.Y {
-				piece = append(piece, g.player.warrior.ToUtf8Char())
+				piece = append(piece, g.player.warrior.ToChar())
 			} else {
 				piece = append(piece, GROUND)
 			}
@@ -78,7 +80,7 @@ func (g Game) legend() string {
 	rows = append(rows, GROUND+" = Ground")
 	rows = append(rows, STAIRS+" = Stairs")
 
-	rows = append(rows, g.player.warrior.ToUtf8Char()+" = Warrior("+strconv.Itoa(g.player.warrior.Health)+" HP)")
+	rows = append(rows, g.player.warrior.ToChar()+" = "+g.player.warrior.Name()+"("+strconv.Itoa(g.player.warrior.Health)+" HP)")
 
 	return strings.Join(rows, "\n")
 }
@@ -89,4 +91,18 @@ func (g Game) hasWon() bool {
 
 func (g Game) isSame(otherGame *Game) bool {
 	return reflect.DeepEqual(g, otherGame)
+}
+
+func (g Game) Feel(c app.Coordinates) *Feel {
+	feel := &Feel{monster: false}
+
+	feel.warrior = g.player.warrior.Coordinates.IsCloseTo(c)
+	for _, unit := range g.units {
+		feel.monster = feel.monster || unit.Coordinates().IsCloseTo(c)
+		if feel.monster {
+			break
+		}
+	}
+
+	return feel
 }

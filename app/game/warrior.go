@@ -1,7 +1,8 @@
-package unit
+package game
 
 import (
 	"pbnPierre/gowarrior/app"
+	"strings"
 )
 
 const MAX_HEALTH = 20
@@ -16,29 +17,24 @@ type Warrior struct {
 }
 
 func NewWarrior(name string, Coordinates app.Coordinates) *Warrior {
-	w := Warrior{name: name}
+	w := Warrior{name: name, Coordinates: Coordinates}
 	w.Health = MAX_HEALTH
 	w.Score = 0
 	w.Attack_power = 2
 	w.Shoot_power = 3
-	w.Coordinates = Coordinates
 	return &w
 }
 
-func (w *Warrior) String() string {
-	if w.name == "" {
+func (w *Warrior) Name() string {
+	if len(strings.Split(w.name, "")) == 0 {
 		return "Warrior"
 	}
 
 	return w.name
 }
 
-func (w Warrior) ToUtf8Char() string {
+func (w Warrior) ToChar() string {
 	return "🤺"
-}
-
-func (w Warrior) ToANSIChar() string {
-	return "@"
 }
 
 func (w *Warrior) FeelEnemy() bool {

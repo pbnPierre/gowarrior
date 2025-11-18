@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"fmt"
 	"strconv"
 
 	"pbnPierre/gowarrior/app/game"
@@ -22,7 +21,6 @@ var (
 )
 
 func run(cmd *cobra.Command, args []string) {
-	fmt.Println("Hello dear", name, "!")
 	i_level, err := strconv.Atoi(level)
 	if err != nil {
 		panic(err)
@@ -36,8 +34,8 @@ func Execute() error {
 }
 
 func init() {
-	rootCmd.PersistentFlags().StringVarP(&level, "level", "l", "0", "--level 1")
-	rootCmd.PersistentFlags().StringVarP(&name, "name", "n", "William Wallace", "--name William Wallace")
+	rootCmd.PersistentFlags().StringVarP(&level, "level", "l", "1", "--level 1")
+	rootCmd.PersistentFlags().StringVarP(&name, "name", "n", "", "--name William Wallace")
 	viper.BindPFlag("level", rootCmd.PersistentFlags().Lookup("level"))
 	viper.BindPFlag("name", rootCmd.PersistentFlags().Lookup("name"))
 }
