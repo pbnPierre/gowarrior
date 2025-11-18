@@ -1,4 +1,4 @@
 {
-  "line-length": false,
-  "single-trailing-newline": false
+  "line_length": false,
+  "single_trailing_newline": false
 }
