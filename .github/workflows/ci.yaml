@@ -23,4 +23,4 @@ jobs:
       - uses: actions/checkout@v5
       - uses: articulate/actions-markdownlint@v1
         with:
-          config: gowarrior/markdownlint-config.json
+          config: ./markdownlint-config.json
