@@ -1,8 +1,6 @@
 package game
 
 import (
-	"bytes"
-	"encoding/gob"
 	"fmt"
 	"reflect"
 	"strconv"
@@ -12,6 +10,8 @@ import (
 
 	"pbnPierre/gowarrior/app/tower"
 	"pbnPierre/gowarrior/app/unit"
+
+	"github.com/huandu/go-clone"
 )
 
 const MAX_LOOP = 10
@@ -39,10 +39,10 @@ func (g *Game) Run() {
 	fmt.Println(g.legend())
 	fmt.Println(g.tower.Tip)
 	for ok := true; ok; ok = !g.hasWon() {
-		previousState := g.hash()
+		previousState := clone.Clone(g).(*Game)
 		g.player.PlayTurn()
 		fmt.Println(g.getMap())
-		if reflect.DeepEqual(previousState, g.hash()) {
+		if g.isSame(previousState) {
 			panic("Game state is stuck boom boom")
 		}
 	}
@@ -87,8 +87,6 @@ func (g Game) hasWon() bool {
 	return g.tower.Stairs == g.player.warrior.Coordinates
 }
 
-func (g Game) hash() []byte {
-	var b bytes.Buffer
-	gob.NewEncoder(&b).Encode(g)
-	return b.Bytes()
+func (g Game) isSame(otherGame *Game) bool {
+	return reflect.DeepEqual(g, otherGame)
 }
