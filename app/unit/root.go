@@ -7,6 +7,7 @@ type Unit interface {
 	ShootPower() int
 	Health() int
 	Coordinates() *app.Coordinates
+	Name() string
 	ToChar() string
 	PerformTurn()
 }

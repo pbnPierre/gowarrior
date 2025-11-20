@@ -2,16 +2,16 @@ package game
 
 import (
 	"fmt"
-	"reflect"
 	"strconv"
 	"strings"
 
 	"pbnPierre/gowarrior/app"
 	"pbnPierre/gowarrior/towers/beginner/level1"
+	"pbnPierre/gowarrior/towers/beginner/level2"
 
 	"pbnPierre/gowarrior/app/tower"
-	"pbnPierre/gowarrior/app/unit"
 
+	"github.com/google/go-cmp/cmp"
 	"github.com/huandu/go-clone"
 )
 
@@ -22,27 +22,30 @@ const GROUND = "🟩"
 const STAIRS = "📈"
 
 type Game struct {
-	tower  tower.Tower
-	player Player
-	units  []unit.Unit
+	Tower  tower.Tower
+	Player Player
 }
 
 func NewGame(name string, level int) *Game {
+	//TODO find better way to handle this
 	tower := level1.Create()
+	if level == 2 {
+		tower = level2.Create()
+	}
 	player := NewPlayer(name)
-	g := Game{tower: *tower, player: *player, units: []unit.Unit{}}
+	g := Game{Tower: *tower, Player: *player}
 	return &g
 }
 
 func (g *Game) Run() {
-	fmt.Println("Hello dear", g.player.warrior.Name(), "!")
-	fmt.Println(g.tower.Description)
+	fmt.Println("Hello dear", g.Player.Warrior.Name, "!")
+	fmt.Println(g.Tower.Description)
 	fmt.Println(g.getMap())
 	fmt.Println(g.legend())
-	fmt.Println(g.tower.Tip)
+	fmt.Println(g.Tower.Tip)
 	for ok := true; ok; ok = !g.hasWon() {
 		previousState := clone.Clone(g).(*Game)
-		g.player.PlayTurn()
+		g.Player.PlayTurn()
 		fmt.Println(g.getMap())
 		if g.isSame(previousState) {
 			panic("Game state is stuck boom boom")
@@ -51,25 +54,33 @@ func (g *Game) Run() {
 	fmt.Println("YOU WIN !")
 }
 
+func (g Game) getCharForCoordinate(coordinates app.Coordinates) string {
+	if coordinates.X == g.Tower.Stairs.X && coordinates.Y == g.Tower.Stairs.Y {
+		return STAIRS
+	} else if coordinates.X == g.Player.Warrior.Coordinates.X && coordinates.Y == g.Player.Warrior.Coordinates.Y {
+		return g.Player.Warrior.ToChar()
+	}
+	for _, unit := range g.Tower.Units {
+		if coordinates.X == unit.Coordinates().X && coordinates.Y == unit.Coordinates().Y {
+			return unit.ToChar()
+		}
+	}
+	return GROUND
+}
+
 func (g Game) getMap() string {
 	var rows []string
-	rows = append(rows, strings.Repeat(WALL, g.tower.Size.Width+2))
-	for y := 0; y < g.tower.Size.Height; y++ {
+	rows = append(rows, strings.Repeat(WALL, g.Tower.Size.Width+2))
+	for y := 0; y < g.Tower.Size.Height; y++ {
 		var piece []string
 		piece = append(piece, WALL)
-		for x := 0; x < g.tower.Size.Width; x++ {
-			if x == g.tower.Stairs.X && y == g.tower.Stairs.Y {
-				piece = append(piece, STAIRS)
-			} else if x == g.player.warrior.Coordinates.X && y == g.player.warrior.Coordinates.Y {
-				piece = append(piece, g.player.warrior.ToChar())
-			} else {
-				piece = append(piece, GROUND)
-			}
+		for x := 0; x < g.Tower.Size.Width; x++ {
+			piece = append(piece, g.getCharForCoordinate(*app.NewCoordinates(x, y)))
 		}
 		piece = append(piece, WALL)
 		rows = append(rows, strings.Join(piece, ""))
 	}
-	rows = append(rows, strings.Repeat(WALL, g.tower.Size.Width+2))
+	rows = append(rows, strings.Repeat(WALL, g.Tower.Size.Width+2))
 	return strings.Join(rows, "\n")
 }
 
@@ -80,24 +91,27 @@ func (g Game) legend() string {
 	rows = append(rows, GROUND+" = Ground")
 	rows = append(rows, STAIRS+" = Stairs")
 
-	rows = append(rows, g.player.warrior.ToChar()+" = "+g.player.warrior.Name()+"("+strconv.Itoa(g.player.warrior.Health)+" HP)")
+	for _, unit := range g.Tower.Units {
+		rows = append(rows, unit.ToChar()+" = "+unit.Name()+"("+strconv.Itoa(unit.Health())+" HP)")
+	}
+	rows = append(rows, g.Player.Warrior.ToChar()+" = "+g.Player.Warrior.Name+"("+strconv.Itoa(g.Player.Warrior.Health)+" HP)")
 
 	return strings.Join(rows, "\n")
 }
 
 func (g Game) hasWon() bool {
-	return g.tower.Stairs == g.player.warrior.Coordinates
+	return g.Tower.Stairs == g.Player.Warrior.Coordinates
 }
 
-func (g Game) isSame(otherGame *Game) bool {
-	return reflect.DeepEqual(g, otherGame)
+func (g *Game) isSame(game *Game) bool {
+	return cmp.Diff(g, game) == ""
 }
 
 func (g Game) Feel(c app.Coordinates) *Feel {
 	feel := &Feel{monster: false}
 
-	feel.warrior = g.player.warrior.Coordinates.IsCloseTo(c)
-	for _, unit := range g.units {
+	feel.warrior = g.Player.Warrior.Coordinates.IsCloseTo(c)
+	for _, unit := range g.Tower.Units {
 		feel.monster = feel.monster || unit.Coordinates().IsCloseTo(c)
 		if feel.monster {
 			break

@@ -2,7 +2,6 @@ package unit
 
 import (
 	"pbnPierre/gowarrior/app"
-	"pbnPierre/gowarrior/app/tower"
 )
 
 type Sludge struct {
@@ -15,12 +14,16 @@ func NewSludge(Coordinates app.Coordinates) *Sludge {
 	return &s
 }
 
+func (s Sludge) Name() string {
+	return "Sludge"
+}
+
 func (s Sludge) ToChar() string {
 	return "💩"
 }
 
-func (s Sludge) Coordinates() app.Coordinates {
-	return s.coordinates
+func (s Sludge) Coordinates() *app.Coordinates {
+	return &s.coordinates
 }
 
 func (s Sludge) ShootPower() int {
@@ -35,6 +38,6 @@ func (s Sludge) Health() int {
 	return s.health
 }
 
-func (s Sludge) PerformTurn(t tower.Tower) {
+func (s Sludge) PerformTurn() {
 
 }

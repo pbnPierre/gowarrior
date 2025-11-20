@@ -5,16 +5,16 @@ import (
 )
 
 type Player struct {
-	warrior Warrior
+	Warrior Warrior
 }
 
 func (p *Player) PlayTurn() {
-	p.warrior.Walk()
+	p.Warrior.Walk()
 }
 
 func NewPlayer(name string) *Player {
 	Coordinates := app.Coordinates{X: 0, Y: 0}
 	warrior := NewWarrior(name, Coordinates)
-	p := Player{warrior: *warrior}
+	p := Player{Warrior: *warrior}
 	return &p
 }
