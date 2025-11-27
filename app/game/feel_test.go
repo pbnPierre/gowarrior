@@ -6,7 +6,7 @@ import (
 )
 
 func TestFeelMonster(t *testing.T) {
-	game := NewGame("José", 2)
+	game := NewGame(playerJose, 2)
 	feel50 := FeelCoordinates(*game, *app.NewCoordinates(5, 0))
 	feel10 := FeelCoordinates(*game, *app.NewCoordinates(1, 0))
 
@@ -19,7 +19,7 @@ func TestFeelMonster(t *testing.T) {
 }
 
 func TestFeelWarriorMonster(t *testing.T) {
-	game := NewGame("José", 2)
+	game := NewGame(playerJose, 2)
 	feel50 := FeelCoordinates(*game, *app.NewCoordinates(5, 0))
 	feel10 := FeelCoordinates(*game, *app.NewCoordinates(1, 0))
 

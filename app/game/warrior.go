@@ -1,18 +1,19 @@
 package game
 
 import (
+	"fmt"
 	"pbnPierre/gowarrior/app"
 )
 
 const MAX_HEALTH = 20
 
 type Warrior struct {
-	Score        int
-	Attack_power int
-	Shoot_power  int
-	Name         string
-	Health       int
-	Coordinates  app.Coordinates
+	Score       int
+	attackPower int
+	shootPower  int
+	Name        string
+	Health      int
+	Coordinates app.Coordinates
 }
 
 func NewWarrior(name string, Coordinates app.Coordinates) *Warrior {
@@ -22,8 +23,8 @@ func NewWarrior(name string, Coordinates app.Coordinates) *Warrior {
 	w := Warrior{Name: name, Coordinates: Coordinates}
 	w.Health = MAX_HEALTH
 	w.Score = 0
-	w.Attack_power = 2
-	w.Shoot_power = 3
+	w.attackPower = 2
+	w.shootPower = 3
 	return &w
 }
 
@@ -31,13 +32,19 @@ func (w Warrior) ToChar() string {
 	return "🤺"
 }
 
-func (w *Warrior) FeelEnemy() bool {
-	return true
+func (w *Warrior) Feel(game Game) Feel {
+	return *FeelCoordinates(game, w.Coordinates)
 }
 
-func (w *Warrior) Walk() {
-	w.Coordinates.X += 1
+func (w *Warrior) Walk(game Game) {
+	feel := game.Player.Warrior.Feel(game)
+	if feel.monster {
+		panic(fmt.Sprintf("%s walks right into a monster\n", w.Name))
+	}
+	w.Coordinates = *app.NewCoordinates(w.Coordinates.X+1, w.Coordinates.Y)
+	fmt.Printf("%s walks\n", w.Name)
 }
 
-func (w *Warrior) Attack() {
+func (w *Warrior) Attack(game Game) {
+	game.AttackAt(w.attackPower, w.Coordinates)
 }

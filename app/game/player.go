@@ -8,8 +8,8 @@ type Player struct {
 	Warrior Warrior
 }
 
-func (p *Player) PlayTurn() {
-	p.Warrior.Walk()
+func (p *Player) PlayTurn(game Game) {
+	p.Warrior.Walk(game)
 }
 
 func NewPlayer(name string) *Player {

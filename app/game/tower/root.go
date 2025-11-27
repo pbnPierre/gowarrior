@@ -2,7 +2,7 @@ package tower
 
 import (
 	"pbnPierre/gowarrior/app"
-	"pbnPierre/gowarrior/app/unit"
+	"pbnPierre/gowarrior/app/game/unit"
 )
 
 type Tower struct {

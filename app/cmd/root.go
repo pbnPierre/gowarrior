@@ -25,7 +25,8 @@ func run(cmd *cobra.Command, args []string) {
 	if err != nil {
 		panic(err)
 	}
-	game := game.NewGame(name, i_level)
+	player := game.NewPlayer(name)
+	game := game.NewGame(player, i_level)
 	game.Run()
 }
 

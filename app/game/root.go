@@ -12,7 +12,7 @@ import (
 	"pbnPierre/gowarrior/towers/beginner/level1"
 	"pbnPierre/gowarrior/towers/beginner/level2"
 
-	"pbnPierre/gowarrior/app/tower"
+	"pbnPierre/gowarrior/app/game/tower"
 
 	"github.com/huandu/go-clone"
 )
@@ -28,13 +28,12 @@ type Game struct {
 	Player Player
 }
 
-func NewGame(name string, level int) *Game {
+func NewGame(player *Player, level int) *Game {
 	towers := map[int]*tower.Tower{
 		1: level1.Create(),
 		2: level2.Create(),
 	}
 
-	player := NewPlayer(name)
 	g := Game{Tower: *towers[level], Player: *player}
 	return &g
 }
@@ -47,13 +46,32 @@ func (g *Game) Run() {
 	fmt.Println(g.Tower.Tip)
 	for ok := true; ok; ok = !g.hasWon() {
 		previousState := clone.Clone(g).(*Game)
-		g.Player.PlayTurn()
 		fmt.Println(g.getMap())
+		for _, unit := range g.Tower.Units {
+			unit.PerformTurn()
+		}
+		g.Player.PlayTurn(*g)
 		if g.isSame(previousState) {
 			panic("Game state is stuck boom boom")
 		}
 	}
+	fmt.Println(g.getMap())
 	fmt.Println("YOU WIN !")
+}
+
+func (g *Game) AttackAt(attackPower int, coordinates app.Coordinates) {
+	for _, unit := range g.Tower.Units {
+		if unit.Coordinates() == coordinates {
+			unit.Attacked(attackPower)
+			break
+		}
+	}
+	if g.Player.Warrior.Coordinates == coordinates {
+		g.Player.Warrior.Health -= attackPower
+	}
+	if g.Player.Warrior.Health <= 0 {
+		panic(fmt.Sprintf("%s is dead\n", g.Player.Warrior.Name))
+	}
 }
 
 func (g Game) getCharForCoordinate(coordinates app.Coordinates) string {

@@ -1,6 +1,7 @@
 package unit
 
 import (
+	"fmt"
 	"pbnPierre/gowarrior/app"
 )
 
@@ -22,12 +23,16 @@ func (s Sludge) ToChar() string {
 	return "💩"
 }
 
-func (s Sludge) Coordinates() *app.Coordinates {
-	return &s.coordinates
+func (s Sludge) Coordinates() app.Coordinates {
+	return s.coordinates
 }
 
 func (s Sludge) ShootPower() int {
 	return 0
+}
+
+func (s *Sludge) Attacked(power int) {
+	s.health -= power
 }
 
 func (s Sludge) AttackPower() int {
@@ -39,5 +44,5 @@ func (s Sludge) Health() int {
 }
 
 func (s Sludge) PerformTurn() {
-
+	fmt.Printf("%s should play\n", s.Name())
 }

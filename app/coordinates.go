@@ -17,7 +17,7 @@ func abs(x int) int {
 	return x
 }
 
-func (c *Coordinates) IsCloseTo(c2 Coordinates) bool {
+func (c Coordinates) IsCloseTo(c2 Coordinates) bool {
 	diff := c.X - c2.X + c.Y - c2.Y
 	return abs(diff) <= 1
 }

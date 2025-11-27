@@ -2,8 +2,8 @@ package level1
 
 import (
 	"pbnPierre/gowarrior/app"
-	"pbnPierre/gowarrior/app/tower"
-	"pbnPierre/gowarrior/app/unit"
+	"pbnPierre/gowarrior/app/game/tower"
+	"pbnPierre/gowarrior/app/game/unit"
 )
 
 func Create() *tower.Tower {

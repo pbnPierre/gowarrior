@@ -1,12 +1,15 @@
 package unit
 
-import "pbnPierre/gowarrior/app"
+import (
+	"pbnPierre/gowarrior/app"
+)
 
 type Unit interface {
 	AttackPower() int
 	ShootPower() int
 	Health() int
-	Coordinates() *app.Coordinates
+	Attacked(power int)
+	Coordinates() app.Coordinates
 	Name() string
 	ToChar() string
 	PerformTurn()
