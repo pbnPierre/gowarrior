@@ -1,7 +1,10 @@
 package game
 
 import (
+	"bytes"
+	"crypto/md5"
 	"fmt"
+	"io"
 	"strconv"
 	"strings"
 
@@ -11,7 +14,6 @@ import (
 
 	"pbnPierre/gowarrior/app/tower"
 
-	"github.com/google/go-cmp/cmp"
 	"github.com/huandu/go-clone"
 )
 
@@ -27,13 +29,13 @@ type Game struct {
 }
 
 func NewGame(name string, level int) *Game {
-	//TODO find better way to handle this
-	tower := level1.Create()
-	if level == 2 {
-		tower = level2.Create()
+	towers := map[int]*tower.Tower{
+		1: level1.Create(),
+		2: level2.Create(),
 	}
+
 	player := NewPlayer(name)
-	g := Game{Tower: *tower, Player: *player}
+	g := Game{Tower: *towers[level], Player: *player}
 	return &g
 }
 
@@ -103,20 +105,20 @@ func (g Game) hasWon() bool {
 	return g.Tower.Stairs == g.Player.Warrior.Coordinates
 }
 
-func (g *Game) isSame(game *Game) bool {
-	return cmp.Diff(g, game) == ""
+func (g *Game) hash() []byte {
+	hash := md5.New()
+	io.WriteString(hash, fmt.Sprint(g.Player.Warrior.Name))
+	io.WriteString(hash, fmt.Sprint(g.Player.Warrior.Health))
+	io.WriteString(hash, fmt.Sprint(g.Player.Warrior.Coordinates.X))
+	io.WriteString(hash, fmt.Sprint(g.Player.Warrior.Coordinates.Y))
+	for _, unit := range g.Tower.Units {
+		io.WriteString(hash, fmt.Sprint(unit.Health()))
+		io.WriteString(hash, fmt.Sprint(unit.Coordinates().X))
+		io.WriteString(hash, fmt.Sprint(unit.Coordinates().Y))
+	}
+	return hash.Sum(nil)
 }
 
-func (g Game) Feel(c app.Coordinates) *Feel {
-	feel := &Feel{monster: false}
-
-	feel.warrior = g.Player.Warrior.Coordinates.IsCloseTo(c)
-	for _, unit := range g.Tower.Units {
-		feel.monster = feel.monster || unit.Coordinates().IsCloseTo(c)
-		if feel.monster {
-			break
-		}
-	}
-
-	return feel
+func (g *Game) isSame(game *Game) bool {
+	return bytes.Equal(g.hash(), game.hash())
 }
