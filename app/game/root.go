@@ -5,14 +5,11 @@ import (
 	"crypto/md5"
 	"fmt"
 	"io"
+	"slices"
 	"strconv"
 	"strings"
 
 	"pbnPierre/gowarrior/app"
-	"pbnPierre/gowarrior/towers/beginner/level1"
-	"pbnPierre/gowarrior/towers/beginner/level2"
-
-	"pbnPierre/gowarrior/app/game/tower"
 
 	"github.com/huandu/go-clone"
 )
@@ -24,17 +21,13 @@ const GROUND = "🟩"
 const STAIRS = "📈"
 
 type Game struct {
-	Tower  tower.Tower
+	Tower  Tower
 	Player Player
 }
 
-func NewGame(player *Player, level int) *Game {
-	towers := map[int]*tower.Tower{
-		1: level1.Create(),
-		2: level2.Create(),
-	}
+func NewGame(player *Player, level *Tower) *Game {
 
-	g := Game{Tower: *towers[level], Player: *player}
+	g := Game{Tower: *level, Player: *player}
 	return &g
 }
 
@@ -48,9 +41,9 @@ func (g *Game) Run() {
 		previousState := clone.Clone(g).(*Game)
 		fmt.Println(g.getMap())
 		for _, unit := range g.Tower.Units {
-			unit.PerformTurn()
+			unit.PerformTurn(g)
 		}
-		g.Player.PlayTurn(*g)
+		g.Player.PlayTurn(g)
 		if g.isSame(previousState) {
 			panic("Game state is stuck boom boom")
 		}
@@ -62,15 +55,32 @@ func (g *Game) Run() {
 func (g *Game) AttackAt(attackPower int, coordinates app.Coordinates) {
 	for _, unit := range g.Tower.Units {
 		if unit.Coordinates() == coordinates {
+			fmt.Printf("%s is attacked and loss -%d HP (%dHP)\n", unit.Name(), attackPower, unit.Health())
 			unit.Attacked(attackPower)
+			if unit.Health() <= 0 {
+				fmt.Printf("%s is dead\n", unit.Name())
+				g.removeUnitAt(coordinates)
+			}
 			break
 		}
 	}
 	if g.Player.Warrior.Coordinates == coordinates {
+		fmt.Printf("%s is attacked and loss -%d HP(%dHP)\n", g.Player.Warrior.Name, attackPower, g.Player.Warrior.Health)
 		g.Player.Warrior.Health -= attackPower
 	}
 	if g.Player.Warrior.Health <= 0 {
 		panic(fmt.Sprintf("%s is dead\n", g.Player.Warrior.Name))
+	}
+}
+
+func (g *Game) removeUnitAt(coordinates app.Coordinates) {
+	for i, unit := range g.Tower.Units {
+		if unit.Coordinates() == coordinates {
+			if unit.Health() <= 0 {
+				g.Tower.Units = slices.Delete(g.Tower.Units, i, 1)
+			}
+			break
+		}
 	}
 }
 

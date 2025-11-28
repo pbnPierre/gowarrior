@@ -8,7 +8,6 @@ import (
 const MAX_HEALTH = 20
 
 type Warrior struct {
-	Score       int
 	attackPower int
 	shootPower  int
 	Name        string
@@ -22,7 +21,6 @@ func NewWarrior(name string, Coordinates app.Coordinates) *Warrior {
 	}
 	w := Warrior{Name: name, Coordinates: Coordinates}
 	w.Health = MAX_HEALTH
-	w.Score = 0
 	w.attackPower = 2
 	w.shootPower = 3
 	return &w
@@ -30,6 +28,10 @@ func NewWarrior(name string, Coordinates app.Coordinates) *Warrior {
 
 func (w Warrior) ToChar() string {
 	return "🤺"
+}
+
+func (w *Warrior) Attacked(power int) {
+	w.Health -= power
 }
 
 func (w *Warrior) Feel(game Game) Feel {
@@ -45,6 +47,6 @@ func (w *Warrior) Walk(game Game) {
 	fmt.Printf("%s walks\n", w.Name)
 }
 
-func (w *Warrior) Attack(game Game) {
+func (w *Warrior) Attack(game *Game) {
 	game.AttackAt(w.attackPower, w.Coordinates)
 }

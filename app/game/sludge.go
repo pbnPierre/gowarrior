@@ -1,4 +1,4 @@
-package unit
+package game
 
 import (
 	"fmt"
@@ -43,6 +43,10 @@ func (s Sludge) Health() int {
 	return s.health
 }
 
-func (s Sludge) PerformTurn() {
-	fmt.Printf("%s should play\n", s.Name())
+func (s Sludge) PerformTurn(game *Game) {
+	fmt.Printf("%s plays\n", s.Name())
+	if s.coordinates.IsCloseTo(game.Player.Warrior.Coordinates) {
+		game.AttackAt(s.AttackPower(), s.coordinates)
+	}
+
 }

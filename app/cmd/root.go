@@ -25,8 +25,13 @@ func run(cmd *cobra.Command, args []string) {
 	if err != nil {
 		panic(err)
 	}
+	towers := map[int]*game.Tower{
+		1: game.CreateLevel1(),
+		2: game.CreateLevel2(),
+	}
+
 	player := game.NewPlayer(name)
-	game := game.NewGame(player, i_level)
+	game := game.NewGame(player, towers[i_level])
 	game.Run()
 }
 

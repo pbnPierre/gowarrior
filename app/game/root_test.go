@@ -8,9 +8,11 @@ import (
 var playerJose = NewPlayer("José")
 var playerGeorges = NewPlayer("Georges")
 var playerJohnDoe = NewPlayer("")
+var level1 = CreateLevel1()
+var level2 = CreateLevel2()
 
 func TestPrintingLevel1Map(t *testing.T) {
-	game := NewGame(playerJose, 1)
+	game := NewGame(playerJose, level1)
 	mapDisplay := strings.Trim(game.getMap(), "\n")
 	expected := `🧱🧱🧱🧱🧱🧱🧱🧱🧱🧱
 🧱🤺🟩🟩🟩🟩🟩🟩📈🧱
@@ -18,7 +20,7 @@ func TestPrintingLevel1Map(t *testing.T) {
 	if mapDisplay != expected {
 		t.Errorf("Level 1 map must display correctly %s does not equals %s", mapDisplay, expected)
 	}
-	game2 := NewGame(playerJohnDoe, 2)
+	game2 := NewGame(playerJohnDoe, level2)
 	mapDisplay2 := strings.Trim(game2.getMap(), "\n")
 	expected2 := `🧱🧱🧱🧱🧱🧱🧱🧱🧱🧱
 🧱🤺🟩🟩🟩💩🟩🟩📈🧱
@@ -29,7 +31,7 @@ func TestPrintingLevel1Map(t *testing.T) {
 }
 
 func TestPrintingLegend(t *testing.T) {
-	game := NewGame(playerJose, 1)
+	game := NewGame(playerJose, level1)
 	legend := strings.Trim(game.legend(), "\n")
 	expected := `🧱 = Wall
 🟩 = Ground
@@ -38,7 +40,7 @@ func TestPrintingLegend(t *testing.T) {
 	if legend != expected {
 		t.Errorf("Level 1 legend must display correctly %s does not equals %s", legend, expected)
 	}
-	game2 := NewGame(playerJohnDoe, 2)
+	game2 := NewGame(playerJohnDoe, level2)
 	legend2 := strings.Trim(game2.legend(), "\n")
 	expected2 := `🧱 = Wall
 🟩 = Ground
@@ -50,9 +52,9 @@ func TestPrintingLegend(t *testing.T) {
 	}
 }
 func TestSameCompare(t *testing.T) {
-	game1 := NewGame(playerJose, 1)
-	game2 := NewGame(playerJose, 1)
-	game3 := NewGame(playerGeorges, 1)
+	game1 := NewGame(playerJose, level1)
+	game2 := NewGame(playerJose, level1)
+	game3 := NewGame(playerGeorges, level1)
 
 	if !game1.isSame(game2) {
 		t.Errorf("game 1 must be considered as same as game 2")

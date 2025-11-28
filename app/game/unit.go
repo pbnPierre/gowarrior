@@ -1,4 +1,4 @@
-package unit
+package game
 
 import (
 	"pbnPierre/gowarrior/app"
@@ -12,5 +12,5 @@ type Unit interface {
 	Coordinates() app.Coordinates
 	Name() string
 	ToChar() string
-	PerformTurn()
+	PerformTurn(game *Game)
 }
