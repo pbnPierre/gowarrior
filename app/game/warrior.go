@@ -2,6 +2,7 @@ package game
 
 import (
 	"fmt"
+	"math"
 	"pbnPierre/gowarrior/app"
 )
 
@@ -30,8 +31,11 @@ func (w Warrior) ToChar() string {
 	return "🤺"
 }
 
+func (w *Warrior) Heal() {
+	w.Health = int(math.Min(float64(w.Health+int(MAX_HEALTH*0.1)), MAX_HEALTH))
+}
 func (w *Warrior) Attacked(power int) {
-	w.Health -= power
+	w.Health = int(math.Max(float64(w.Health-power), 0))
 }
 
 func (w *Warrior) Feel(game Game) Feel {

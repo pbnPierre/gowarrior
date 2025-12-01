@@ -28,6 +28,7 @@ func run(cmd *cobra.Command, args []string) {
 	towers := map[int]*game.Tower{
 		1: game.CreateLevel1(),
 		2: game.CreateLevel2(),
+		3: game.CreateLevel3(),
 	}
 
 	player := game.NewPlayer(name)

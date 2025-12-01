@@ -26,7 +26,6 @@ type Game struct {
 }
 
 func NewGame(player *Player, level *Tower) *Game {
-
 	g := Game{Tower: *level, Player: *player}
 	return &g
 }
@@ -60,8 +59,8 @@ func (g *Game) AttackAt(attackPower int, coordinates app.Coordinates) {
 			if unit.Health() <= 0 {
 				fmt.Printf("%s is dead\n", unit.Name())
 				g.removeUnitAt(coordinates)
+				break
 			}
-			break
 		}
 	}
 	if g.Player.Warrior.Coordinates == coordinates {
@@ -76,9 +75,7 @@ func (g *Game) AttackAt(attackPower int, coordinates app.Coordinates) {
 func (g *Game) removeUnitAt(coordinates app.Coordinates) {
 	for i, unit := range g.Tower.Units {
 		if unit.Coordinates() == coordinates {
-			if unit.Health() <= 0 {
-				g.Tower.Units = slices.Delete(g.Tower.Units, i, 1)
-			}
+			g.Tower.Units = slices.Delete(g.Tower.Units, i, 1)
 			break
 		}
 	}
