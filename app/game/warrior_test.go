@@ -21,7 +21,9 @@ func TestHealing(t *testing.T) {
 		t.Errorf("An attacked Warrior should loose HP")
 	}
 	warrior.Heal()
+	warrior.StartTurn()
 	warrior.Heal()
+	warrior.StartTurn()
 	warrior.Heal()
 	if warrior.Health != MAX_HEALTH {
 		t.Errorf("Warrior should not have more than MAX_HEALTH const")

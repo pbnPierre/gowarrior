@@ -20,7 +20,7 @@ func (s Sludge) Name() string {
 }
 
 func (s Sludge) ToChar() string {
-	return "💩"
+	return "💧"
 }
 
 func (s Sludge) Coordinates() app.Coordinates {

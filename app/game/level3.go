@@ -15,8 +15,6 @@ func CreateLevel3() *Tower {
 		"The air feels thicker than before. There must be a horde of sludge.",
 		"Be careful not to die! Use warrior.Health to keep an eye on your health, and warrior.Heal() to earn 10% of max health back.",
 		"When there is no enemy ahead of you call warrior.rest! until health is full before walking forward.",
-		15,
-		10,
 		Size{Width: 9, Height: 1},
 		*app.NewCoordinates(8, 0),
 		units,

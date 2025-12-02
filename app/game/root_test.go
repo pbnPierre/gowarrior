@@ -23,7 +23,7 @@ func TestPrintingLevel1Map(t *testing.T) {
 	game2 := NewGame(playerJohnDoe, level2)
 	mapDisplay2 := strings.Trim(game2.getMap(), "\n")
 	expected2 := `🧱🧱🧱🧱🧱🧱🧱🧱🧱🧱
-🧱🤺🟩🟩🟩💩🟩🟩📈🧱
+🧱🤺🟩🟩🟩💧🟩🟩📈🧱
 🧱🧱🧱🧱🧱🧱🧱🧱🧱🧱`
 	if mapDisplay2 != expected2 {
 		t.Errorf("Level 2 map must display correctly %s does not equals %s", mapDisplay2, expected2)
@@ -45,7 +45,7 @@ func TestPrintingLegend(t *testing.T) {
 	expected2 := `🧱 = Wall
 🟩 = Ground
 📈 = Stairs
-💩 = Sludge(12 HP)
+💧 = Sludge(12 HP)
 🤺 = Warrior(20 HP)`
 	if legend2 != expected2 {
 		t.Errorf("Level 2 legend must display correctly %s does not equals %s", legend2, expected2)
