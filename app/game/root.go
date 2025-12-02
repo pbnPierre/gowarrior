@@ -60,7 +60,6 @@ func (g *Game) AttackAt(attackPower int, coordinates app.Coordinates) {
 			fmt.Printf("%s is dead\n", unit.Name())
 			delete(g.Tower.Units, coordinates)
 		}
-
 	}
 	if g.Player.Warrior.Coordinates == coordinates {
 		fmt.Printf("%s is attacked and loss -%d HP(%dHP)\n", g.Player.Warrior.Name, attackPower, g.Player.Warrior.Health)
@@ -72,13 +71,13 @@ func (g *Game) AttackAt(attackPower int, coordinates app.Coordinates) {
 }
 
 func (g Game) getCharForCoordinate(coordinates app.Coordinates) string {
-	if coordinates.X == g.Tower.Stairs.X && coordinates.Y == g.Tower.Stairs.Y {
+	if coordinates.Equals(g.Tower.Stairs) {
 		return STAIRS
-	} else if coordinates.X == g.Player.Warrior.Coordinates.X && coordinates.Y == g.Player.Warrior.Coordinates.Y {
+	} else if coordinates.Equals(g.Player.Warrior.Coordinates) {
 		return g.Player.Warrior.ToChar()
 	}
-	for _, unit := range g.Tower.Units {
-		if coordinates.X == unit.Coordinates().X && coordinates.Y == unit.Coordinates().Y {
+	for unitCoordinates, unit := range g.Tower.Units {
+		if coordinates.Equals(unitCoordinates) {
 			return unit.ToChar()
 		}
 	}
