@@ -5,7 +5,6 @@ import (
 	"crypto/md5"
 	"fmt"
 	"io"
-	"slices"
 	"strconv"
 	"strings"
 
@@ -42,6 +41,7 @@ func (g *Game) Run() {
 		for _, unit := range g.Tower.Units {
 			unit.PerformTurn(g)
 		}
+		g.Player.Warrior.StartTurn()
 		g.Player.PlayTurn(g)
 		if g.isSame(previousState) {
 			panic("Game state is stuck boom boom")
@@ -52,16 +52,15 @@ func (g *Game) Run() {
 }
 
 func (g *Game) AttackAt(attackPower int, coordinates app.Coordinates) {
-	for _, unit := range g.Tower.Units {
-		if unit.Coordinates() == coordinates {
-			fmt.Printf("%s is attacked and loss -%d HP (%dHP)\n", unit.Name(), attackPower, unit.Health())
-			unit.Attacked(attackPower)
-			if unit.Health() <= 0 {
-				fmt.Printf("%s is dead\n", unit.Name())
-				g.removeUnitAt(coordinates)
-				break
-			}
+	unit, ok := g.Tower.Units[coordinates]
+	if ok {
+		fmt.Printf("%s is attacked and loss -%d HP (%dHP)\n", unit.Name(), attackPower, unit.Health())
+		unit.Attacked(attackPower)
+		if unit.Health() <= 0 {
+			fmt.Printf("%s is dead\n", unit.Name())
+			delete(g.Tower.Units, coordinates)
 		}
+
 	}
 	if g.Player.Warrior.Coordinates == coordinates {
 		fmt.Printf("%s is attacked and loss -%d HP(%dHP)\n", g.Player.Warrior.Name, attackPower, g.Player.Warrior.Health)
@@ -69,15 +68,6 @@ func (g *Game) AttackAt(attackPower int, coordinates app.Coordinates) {
 	}
 	if g.Player.Warrior.Health <= 0 {
 		panic(fmt.Sprintf("%s is dead\n", g.Player.Warrior.Name))
-	}
-}
-
-func (g *Game) removeUnitAt(coordinates app.Coordinates) {
-	for i, unit := range g.Tower.Units {
-		if unit.Coordinates() == coordinates {
-			g.Tower.Units = slices.Delete(g.Tower.Units, i, 1)
-			break
-		}
 	}
 }
 

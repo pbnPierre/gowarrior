@@ -5,11 +5,11 @@ import (
 )
 
 func CreateLevel3() *Tower {
-	var units = []Unit{
-		NewSludge(*app.NewCoordinates(2, 0)),
-		NewSludge(*app.NewCoordinates(4, 0)),
-		NewSludge(*app.NewCoordinates(5, 0)),
-		NewSludge(*app.NewCoordinates(7, 0)),
+	var units = map[app.Coordinates]Unit{
+		*app.NewCoordinates(2, 0): NewSludge(*app.NewCoordinates(2, 0)),
+		*app.NewCoordinates(4, 0): NewSludge(*app.NewCoordinates(4, 0)),
+		*app.NewCoordinates(5, 0): NewSludge(*app.NewCoordinates(5, 0)),
+		*app.NewCoordinates(7, 0): NewSludge(*app.NewCoordinates(7, 0)),
 	}
 	return NewTower(
 		"The air feels thicker than before. There must be a horde of sludge.",
@@ -19,6 +19,6 @@ func CreateLevel3() *Tower {
 		10,
 		Size{Width: 9, Height: 1},
 		*app.NewCoordinates(8, 0),
-		units[:],
+		units,
 	)
 }

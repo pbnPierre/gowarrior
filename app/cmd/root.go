@@ -32,8 +32,16 @@ func run(cmd *cobra.Command, args []string) {
 	}
 
 	player := game.NewPlayer(name)
-	game := game.NewGame(player, towers[i_level])
-	game.Run()
+	if i_level == 0 {
+		for i := 1; i <= len(towers); i++ {
+			game := game.NewGame(player, towers[i])
+			game.Run()
+		}
+	} else {
+		game := game.NewGame(player, towers[i_level])
+		game.Run()
+	}
+
 }
 
 func Execute() error {

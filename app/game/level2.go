@@ -5,8 +5,8 @@ import (
 )
 
 func CreateLevel2() *Tower {
-	var units = []Unit{
-		NewSludge(*app.NewCoordinates(4, 0)),
+	var units = map[app.Coordinates]Unit{
+		*app.NewCoordinates(4, 0): NewSludge(*app.NewCoordinates(4, 0)),
 	}
 	return NewTower(
 		"It is too dark to see anything, but you smell sludge nearby.",
@@ -16,6 +16,6 @@ func CreateLevel2() *Tower {
 		10,
 		Size{Width: 8, Height: 1},
 		*app.NewCoordinates(7, 0),
-		units[:],
+		units,
 	)
 }
