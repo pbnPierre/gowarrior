@@ -1,12 +1,11 @@
 package game
 
 import (
-	"pbnPierre/gowarrior/app"
 	"testing"
 )
 
 func TestDisplay(t *testing.T) {
-	warrior := NewWarrior("", *app.NewCoordinates(0, 0))
+	warrior := NewWarrior("", *NewCoordinates(0, 0))
 
 	if warrior.Name != "Warrior" {
 		t.Errorf("Warrior should have a default value if no data provided")
@@ -14,7 +13,7 @@ func TestDisplay(t *testing.T) {
 }
 
 func TestHealing(t *testing.T) {
-	warrior := NewWarrior("", *app.NewCoordinates(0, 0))
+	warrior := NewWarrior("", *NewCoordinates(0, 0))
 
 	warrior.Attacked(3)
 	if warrior.Health != (MAX_HEALTH - 3) {
@@ -31,7 +30,7 @@ func TestHealing(t *testing.T) {
 }
 
 func TestAttack(t *testing.T) {
-	warrior := NewWarrior("", *app.NewCoordinates(0, 0))
+	warrior := NewWarrior("", *NewCoordinates(0, 0))
 
 	warrior.Attacked(30)
 	if warrior.Health < 0 {

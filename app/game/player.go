@@ -1,9 +1,5 @@
 package game
 
-import (
-	"pbnPierre/gowarrior/app"
-)
-
 type Player struct {
 	Warrior Warrior
 }
@@ -19,12 +15,8 @@ func (p *Player) PlayTurn(game *Game) {
 	}
 }
 
-func (p *Player) GetWarrior() *Warrior {
-	return &p.Warrior
-}
-
 func NewPlayer(name string) *Player {
-	Coordinates := app.Coordinates{X: 0, Y: 0}
+	Coordinates := Coordinates{X: 0, Y: 0}
 	warrior := NewWarrior(name, Coordinates)
 	p := Player{Warrior: *warrior}
 	return &p

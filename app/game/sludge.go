@@ -2,15 +2,14 @@ package game
 
 import (
 	"fmt"
-	"pbnPierre/gowarrior/app"
 )
 
 type Sludge struct {
 	health      int
-	coordinates app.Coordinates
+	coordinates Coordinates
 }
 
-func NewSludge(Coordinates app.Coordinates) *Sludge {
+func NewSludge(Coordinates Coordinates) *Sludge {
 	s := Sludge{coordinates: Coordinates, health: 12}
 	return &s
 }
@@ -23,16 +22,13 @@ func (s Sludge) ToChar() string {
 	return "💧"
 }
 
-func (s Sludge) Coordinates() app.Coordinates {
+func (s Sludge) Coordinates() Coordinates {
 	return s.coordinates
-}
-
-func (s Sludge) ShootPower() int {
-	return 0
 }
 
 func (s *Sludge) Attacked(power int) {
 	s.health -= power
+	fmt.Printf("%s is attacked and loss -%d HP (%d HP)\n", s.Name(), power, s.health)
 }
 
 func (s Sludge) AttackPower() int {
@@ -46,7 +42,7 @@ func (s Sludge) Health() int {
 func (s Sludge) PerformTurn(game *Game) {
 	fmt.Printf("%s plays\n", s.Name())
 	if s.coordinates.IsCloseTo(game.Player.Warrior.Coordinates) {
-		game.AttackAt(s.AttackPower(), s.coordinates)
+		game.AttackAt(game.Player.Warrior.Coordinates, s.AttackPower())
 	}
 
 }

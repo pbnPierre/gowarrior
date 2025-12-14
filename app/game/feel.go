@@ -1,13 +1,11 @@
 package game
 
-import "pbnPierre/gowarrior/app"
-
 type Feel struct {
 	warrior bool
 	monster bool
 }
 
-func FeelCoordinates(game Game, c app.Coordinates) *Feel {
+func FeelCoordinates(game Game, c Coordinates) *Feel {
 	feel := &Feel{monster: false}
 
 	feel.warrior = game.Player.Warrior.Coordinates.IsCloseTo(c)

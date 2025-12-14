@@ -8,8 +8,6 @@ import (
 	"strconv"
 	"strings"
 
-	"pbnPierre/gowarrior/app"
-
 	"github.com/huandu/go-clone"
 )
 
@@ -41,6 +39,7 @@ func (g *Game) Run() {
 		for _, unit := range g.Tower.Units {
 			unit.PerformTurn(g)
 		}
+		fmt.Printf("%s plays\n", g.Player.Warrior.Name)
 		g.Player.Warrior.StartTurn()
 		g.Player.PlayTurn(g)
 		if g.isSame(previousState) {
@@ -51,10 +50,9 @@ func (g *Game) Run() {
 	fmt.Println("YOU WIN !")
 }
 
-func (g *Game) AttackAt(attackPower int, coordinates app.Coordinates) {
+func (g *Game) AttackAt(coordinates Coordinates, attackPower int) {
 	unit, ok := g.Tower.Units[coordinates]
 	if ok {
-		fmt.Printf("%s is attacked and loss -%d HP (%dHP)\n", unit.Name(), attackPower, unit.Health())
 		unit.Attacked(attackPower)
 		if unit.Health() <= 0 {
 			fmt.Printf("%s is dead\n", unit.Name())
@@ -62,15 +60,14 @@ func (g *Game) AttackAt(attackPower int, coordinates app.Coordinates) {
 		}
 	}
 	if g.Player.Warrior.Coordinates == coordinates {
-		fmt.Printf("%s is attacked and loss -%d HP(%dHP)\n", g.Player.Warrior.Name, attackPower, g.Player.Warrior.Health)
-		g.Player.Warrior.Health -= attackPower
+		g.Player.Warrior.Attacked(attackPower)
 	}
 	if g.Player.Warrior.Health <= 0 {
 		panic(fmt.Sprintf("%s is dead\n", g.Player.Warrior.Name))
 	}
 }
 
-func (g Game) getCharForCoordinate(coordinates app.Coordinates) string {
+func (g Game) getCharForCoordinate(coordinates Coordinates) string {
 	if coordinates.Equals(g.Tower.Stairs) {
 		return STAIRS
 	} else if coordinates.Equals(g.Player.Warrior.Coordinates) {
@@ -91,7 +88,7 @@ func (g Game) getMap() string {
 		var piece []string
 		piece = append(piece, WALL)
 		for x := 0; x < g.Tower.Size.Width; x++ {
-			piece = append(piece, g.getCharForCoordinate(*app.NewCoordinates(x, y)))
+			piece = append(piece, g.getCharForCoordinate(*NewCoordinates(x, y)))
 		}
 		piece = append(piece, WALL)
 		rows = append(rows, strings.Join(piece, ""))
