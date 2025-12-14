@@ -41,7 +41,7 @@ func (a Archer) Health() int {
 
 func (a Archer) PerformTurn(game *Game) {
 	fmt.Printf("%s plays\n", a.Name())
-	if a.coordinates.CanSeeAt(game.Tower, game.Player.Warrior.Coordinates) {
+	if a.coordinates.CanSeeAt(game.Tower, game.Player.Warrior.Coordinates) && !a.coordinates.IsCloseTo(game.Player.Warrior.Coordinates) {
 		game.AttackAt(game.Player.Warrior.Coordinates, a.AttackPower())
 	}
 }
