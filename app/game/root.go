@@ -18,12 +18,13 @@ const GROUND = "🟩"
 const STAIRS = "📈"
 
 type Game struct {
-	Tower  Tower
-	Player Player
+	timeBonus int
+	Tower     Tower
+	Player    Player
 }
 
 func NewGame(player *Player, level *Tower) *Game {
-	g := Game{Tower: *level, Player: *player}
+	g := Game{Tower: *level, Player: *player, timeBonus: level.TimeBonus}
 	return &g
 }
 
@@ -41,13 +42,16 @@ func (g *Game) Run() {
 		}
 		fmt.Printf("%s plays\n", g.Player.Warrior.Name)
 		g.Player.Warrior.StartTurn()
+		if g.timeBonus != 0 {
+			g.timeBonus = g.timeBonus - 1
+		}
 		g.Player.PlayTurn(g)
 		if g.isSame(previousState) {
 			panic("Game state is stuck boom boom")
 		}
 	}
 	fmt.Println(g.getMap())
-	fmt.Println("YOU WIN !")
+	fmt.Printf("YOU WIN with %d points !\n", g.Player.Points)
 }
 
 func (g *Game) AttackAt(coordinates Coordinates, attackPower int) {
@@ -56,14 +60,27 @@ func (g *Game) AttackAt(coordinates Coordinates, attackPower int) {
 		unit.Attacked(attackPower)
 		if unit.Health() <= 0 {
 			fmt.Printf("%s is dead\n", unit.Name())
-			delete(g.Tower.Units, coordinates)
 		}
+		delete(g.Tower.Units, coordinates)
 	}
 	if g.Player.Warrior.Coordinates == coordinates {
 		g.Player.Warrior.Attacked(attackPower)
 	}
 	if g.Player.Warrior.Health <= 0 {
 		panic(fmt.Sprintf("%s is dead\n", g.Player.Warrior.Name))
+	}
+}
+
+func (g *Game) RescueAt(coordinates Coordinates) {
+	unit, ok := g.Tower.Units[coordinates]
+	if ok {
+		if unit.IsCaptive() {
+			delete(g.Tower.Units, coordinates)
+			g.Player.Points += 20
+		}
+		if unit.IsFoe() {
+			panic("A Foe cannot be rescued")
+		}
 	}
 }
 

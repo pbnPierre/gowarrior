@@ -30,6 +30,7 @@ func run(cmd *cobra.Command, args []string) {
 		2: game.CreateLevel2(),
 		3: game.CreateLevel3(),
 		4: game.CreateLevel4(),
+		5: game.CreateLevel5(),
 	}
 
 	player := game.NewPlayer(name)

@@ -2,12 +2,15 @@ package game
 
 type Player struct {
 	Warrior    Warrior
+	Points     int
 	lastHealth int
 }
 
 func (p *Player) PlayTurn(game *Game) {
 	feel := p.Warrior.Feel(*game)
-	if feel.monster {
+	if feel.captive {
+		p.Warrior.Rescue(game)
+	} else if feel.monster {
 		p.Warrior.Attack(game)
 	} else if p.Warrior.Health < MAX_HEALTH && p.lastHealth == p.Warrior.Health {
 		p.Warrior.Heal()
@@ -20,6 +23,6 @@ func (p *Player) PlayTurn(game *Game) {
 func NewPlayer(name string) *Player {
 	Coordinates := Coordinates{X: 0, Y: 0}
 	warrior := NewWarrior(name, Coordinates)
-	p := Player{Warrior: *warrior}
+	p := Player{Warrior: *warrior, lastHealth: MAX_HEALTH, Points: 0}
 	return &p
 }

@@ -13,5 +13,7 @@ func CreateLevel4() *Tower {
 		Size{Width: 7, Height: 1},
 		*NewCoordinates(6, 0),
 		units,
+		45,
+		90,
 	)
 }

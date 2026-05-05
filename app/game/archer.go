@@ -31,6 +31,14 @@ func (a *Archer) Attacked(power int) {
 	fmt.Printf("%s is attacked and loss -%d HP (%d HP)\n", a.Name(), power, a.health)
 }
 
+func (s Archer) IsCaptive() bool {
+	return false
+}
+
+func (s Archer) IsFoe() bool {
+	return true
+}
+
 func (a Archer) AttackPower() int {
 	return 3
 }

@@ -18,6 +18,14 @@ func (s ThickSludge) Name() string {
 	return "ThickSludge"
 }
 
+func (s ThickSludge) IsCaptive() bool {
+	return false
+}
+
+func (s ThickSludge) IsFoe() bool {
+	return true
+}
+
 func (s ThickSludge) ToChar() string {
 	return "🌰"
 }
