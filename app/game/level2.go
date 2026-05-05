@@ -11,5 +11,7 @@ func CreateLevel2() *Tower {
 		Size{Width: 8, Height: 1},
 		*NewCoordinates(7, 0),
 		units,
+		20,
+		26,
 	)
 }

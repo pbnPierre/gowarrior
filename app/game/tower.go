@@ -6,6 +6,8 @@ type Size struct {
 }
 
 type Tower struct {
+	TimeBonus   int
+	AceScore    int
 	Description string
 	Tip         string
 	Clue        string
@@ -14,8 +16,8 @@ type Tower struct {
 	Units       map[Coordinates]Unit
 }
 
-func NewTower(description string, tip string, clue string, size Size, stairs Coordinates, units map[Coordinates]Unit) *Tower {
-	t := Tower{Description: description, Tip: tip, Clue: clue, Size: size, Stairs: stairs, Units: units}
+func NewTower(description string, tip string, clue string, size Size, stairs Coordinates, units map[Coordinates]Unit, timeBonus int, aceScore int) *Tower {
+	t := Tower{Description: description, Tip: tip, Clue: clue, Size: size, Stairs: stairs, Units: units, TimeBonus: timeBonus, AceScore: aceScore}
 	return &t
 }
 

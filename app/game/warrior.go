@@ -59,8 +59,8 @@ func (w *Warrior) Walk(game Game) {
 		panic("Warrior cannot make two actions in the same turn")
 	}
 	feel := game.Player.Warrior.Feel(game)
-	if feel.monster {
-		panic(fmt.Sprintf("%s walks right into a monster\n", w.Name))
+	if feel.monster || feel.captive {
+		panic(fmt.Sprintf("%s walks right into something\n", w.Name))
 	}
 	w.Coordinates = *NewCoordinates(w.Coordinates.X+1, w.Coordinates.Y)
 	w.turnActionCount++
@@ -72,5 +72,13 @@ func (w *Warrior) Attack(game *Game) {
 		panic("Warrior cannot make two actions in the same turn")
 	}
 	game.AttackAt(*NewCoordinates(w.Coordinates.X+1, w.Coordinates.Y), w.attackPower)
+	w.turnActionCount++
+}
+
+func (w *Warrior) Rescue(game *Game) {
+	if w.turnActionCount > 0 {
+		panic("Warrior cannot make two actions in the same turn")
+	}
+	game.RescueAt(*NewCoordinates(w.Coordinates.X+1, w.Coordinates.Y))
 	w.turnActionCount++
 }

@@ -26,6 +26,14 @@ func (s Sludge) Coordinates() Coordinates {
 	return s.coordinates
 }
 
+func (s Sludge) IsCaptive() bool {
+	return false
+}
+
+func (s Sludge) IsFoe() bool {
+	return true
+}
+
 func (s *Sludge) Attacked(power int) {
 	s.health -= power
 	fmt.Printf("%s is attacked and loss -%d HP (%d HP)\n", s.Name(), power, s.health)
